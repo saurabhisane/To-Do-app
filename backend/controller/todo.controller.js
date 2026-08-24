@@ -1,37 +1,114 @@
-const TodoServices = require('../services/todo.services')
 
-exports.createTodo = async (req, res, next) => {
+
+const TodoServices = require("../services/todo.services");
+
+exports.createTodo = async (req, res) => {
+
     try {
+
         const { userId, title, desc } = req.body;
-        let todo = await TodoServices.createTodo(userId, title, desc);
 
-        res.json({ status: true, success: todo });
+        if (!userId || !title || !desc) {
+            return res.status(400).json({
+                status: false,
+                error: "userId, title and desc are required"
+            });
+        }
+
+        const todo = await TodoServices.createTodo(
+            userId,
+            title,
+            desc
+        );
+
+        res.status(201).json({
+            status: true,
+            success: todo
+        });
 
     } catch (e) {
-        throw e;
-    }
-}
 
-exports.getTodoList = async (req, res, next) => {
+        console.error("Error creating todo:", e);
+
+        res.status(500).json({
+            status: false,
+            error: e.message || "Internal Server Error"
+        });
+    }
+};
+
+
+exports.getTodoList = async (req, res) => {
+
     try {
+
         const { userId } = req.body;
-        let todoData = await TodoServices.getTodoData(userId);
 
-        res.json({ status: true, success: todoData });
+        if (!userId) {
+            return res.status(400).json({
+                status: false,
+                error: "userId is required"
+            });
+        }
+
+        const todoData =
+            await TodoServices.getTodoData(userId);
+
+        res.status(200).json({
+            status: true,
+            success: todoData
+        });
 
     } catch (e) {
-        throw e;
-    }
-}
 
-exports.deleteTodoList = async (req, res, next) => {
+        console.error("Error getting todos:", e);
+
+        res.status(500).json({
+            status: false,
+            error: e.message || "Internal Server Error"
+        });
+    }
+};
+
+
+exports.deleteTodoList = async (req, res) => {
+
     try {
-        const { id } = req.body;
-        let deletedItem = await TodoServices.deleteTodoData(id);
 
-        res.json({ status: true, success: deletedItem });
+        const { userId, todoId } = req.body;
+
+        if (!userId || !todoId) {
+            return res.status(400).json({
+                status: false,
+                error: "userId and todoId are required"
+            });
+        }
+
+        const deletedItem =
+            await TodoServices.deleteTodoData(
+                userId,
+                todoId
+            );
+
+        if (!deletedItem) {
+            return res.status(404).json({
+                status: false,
+                error: "Todo not found"
+            });
+        }
+
+        res.status(200).json({
+            status: true,
+            success: deletedItem
+        });
 
     } catch (e) {
-        throw e;
+
+        console.error("Error deleting todo:", e);
+
+        res.status(500).json({
+            status: false,
+            error: e.message || "Internal Server Error"
+        });
     }
-}
+};

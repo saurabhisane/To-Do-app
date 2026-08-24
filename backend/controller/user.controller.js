@@ -1,23 +1,34 @@
-const UserModel = require("../model/user.model");
-const UserService = require("../services/user.services");
-const { registerUser } = require("../services/user.services");
 
-exports.register = async (req, res, next) => {
+const UserService = require("../services/user.services");
+const bcrypt = require("bcrypt");
+
+exports.register = async (req, res) => {
+
     try {
 
         const { email, password } = req.body;
 
-        const succesRes = await registerUser(email, password);
+        await UserService.registerUser(email, password);
 
-        res.json({ status: true, success: 'user Registered susccessfully' });
+        res.status(201).json({
+            status: true,
+            success: "User Registered successfully"
+        });
 
     } catch (e) {
-        console.error("Error in register:", e);
-        res.status(500).json({ status: false, error: e.message || "Internal Server Error" });
-    }
-}
 
-exports.login = async (req, res, next) => {
+        console.error("Error in register:", e);
+
+        res.status(500).json({
+            status: false,
+            error: e.message || "Internal Server Error"
+        });
+    }
+};
+
+
+exports.login = async (req, res) => {
+
     try {
 
         const { email, password } = req.body;
@@ -25,27 +36,49 @@ exports.login = async (req, res, next) => {
         const user = await UserService.checkuser(email);
 
         if (!user) {
-            throw new Error('User does not exist');
+
+            return res.status(404).json({
+                status: false,
+                error: "User does not exist"
+            });
         }
 
-        const ismatch = await user.comparePassword(password);
+        const ismatch = await bcrypt.compare(
+            password,
+            user.password
+        );
 
-        console.log("ismatch = ",ismatch)
+        if (!ismatch) {
 
-        if (ismatch === false) {
-
-            throw new Error('Invalid password');
-        } else {
-
-            let tokenData = { _id: user._id, email: user.email };
-
-            const token = await UserService.generateToken(tokenData, "SecretKey", "1h");
-
-            res.status(200).json({ status: true, token: token });
+            return res.status(401).json({
+                status: false,
+                error: "Invalid password"
+            });
         }
+
+        const tokenData = {
+            _id: user.userId,
+            email: user.email
+        };
+
+        const token = await UserService.generateToken(
+            tokenData,
+            process.env.JWT_SECRET || "SecretKey",
+            "1h"
+        );
+
+        res.status(200).json({
+            status: true,
+            token: token
+        });
 
     } catch (e) {
-        console.error("Error in register:", e);
-        res.status(500).json({ status: false, error: e.message || "Internal Server Error" });
+
+        console.error("Error in login:", e);
+
+        res.status(500).json({
+            status: false,
+            error: e.message || "Internal Server Error"
+        });
     }
-}   
+};

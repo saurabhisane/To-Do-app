@@ -1,4 +1,8 @@
-final url = 'http://192.168.171.211:4588/';
+const String url = String.fromEnvironment(
+  'API_BASE_URL',
+  defaultValue: 'http://192.168.49.2:32300/',
+);
+
 final registration = "${url}registration";
 final login = "${url}login";
 final todo = "${url}todo";

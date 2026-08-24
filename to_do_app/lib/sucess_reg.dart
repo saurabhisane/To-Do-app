@@ -75,6 +75,7 @@ class _SuccessRegState extends State<SuccessReg> {
           todoList = items.map((item) {
             return {
               'id': item['_id'] ?? 'null',
+              'todoId': item['todoId'] ?? item['_id'] ?? 'null',
               'title': item['title'] ?? 'Untitled',
               'description': item['desc'] ?? 'No description available',
             };
@@ -91,9 +92,14 @@ class _SuccessRegState extends State<SuccessReg> {
     }
   }
 
-  Future<void> deleteTodoFromServer(String id, int index) async {
+  Future<void> deleteTodoFromServer(String todoId, int index) async {
+    if (userId == null || userId!.isEmpty) {
+      Get.snackbar('Error', 'User ID is missing');
+      return;
+    }
     var regBody = {
-      "id" : id,
+      "userId": userId,
+      "todoId": todoId,
     };
     try {
       final url = Uri.parse(todoDelete);
@@ -205,10 +211,14 @@ class _SuccessRegState extends State<SuccessReg> {
                           icon:
                               const Icon(Icons.delete, color: Colors.redAccent),
                           onPressed: () {
-                            setState(() {
-                              deleteTodoFromServer(todoList[index]['id'],index);
-                              print(todoList[index]['id']);
-                            });
+                            final todoId = todoList[index]['todoId']?.toString();
+
+                            if (todoId == null || todoId.isEmpty) {
+                              Get.snackbar('Error', 'Todo ID is missing');
+                              return;
+                            }
+
+                            deleteTodoFromServer(todoId, index);
                           },
                         ),
                       ),
