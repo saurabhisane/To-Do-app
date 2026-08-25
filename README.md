@@ -21,9 +21,18 @@
 ![GitHub forks](https://img.shields.io/github/forks/saurabhisane/To-Do-app?style=flat-square&color=011627)
 ![License](https://img.shields.io/badge/License-MIT-informational?style=flat-square&color=2EC4B6)
 
-**A cloud-native, production-style To-Do application** — Flutter frontend, Express/Node.js REST API,
-DynamoDB persistence, containerized with Docker, orchestrated with Kubernetes, provisioned with
-Terraform, and shipped through an automated Jenkins CI/CD pipeline.
+### A cloud-native, production-style To-Do application
+
+**Flutter frontend · Express REST API · DynamoDB · Docker · Kubernetes · Terraform · Jenkins CI/CD**
+
+<p align="center">
+  <a href="#-overview"><b>Overview</b></a> ·
+  <a href="#-features"><b>Features</b></a> ·
+  <a href="#️-tech-stack"><b>Tech Stack</b></a> ·
+  <a href="#-system-architecture"><b>Architecture</b></a> ·
+  <a href="#-cicd-pipeline-jenkins"><b>CI/CD</b></a> ·
+  <a href="#-getting-started"><b>Getting Started</b></a>
+</p>
 
 </div>
 
@@ -33,23 +42,6 @@ Terraform, and shipped through an automated Jenkins CI/CD pipeline.
   <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%">
 </p>
 
-## 📖 Table of Contents
-
-- [Overview](#-overview)
-- [Features](#-features)
-- [Tech Stack](#️-tech-stack)
-- [System Architecture](#-system-architecture)
-- [CI/CD Pipeline (Jenkins)](#-cicd-pipeline-jenkins)
-- [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
-- [Environment Variables](#-environment-variables)
-- [API Reference](#-api-reference)
-- [Database Schema](#-database-schema)
-- [Roadmap](#-roadmap)
-- [Contributing](#-contributing)
-- [License](#-license)
-- [Author](#-author)
-
 <br/>
 
 ## ✨ Overview
@@ -57,26 +49,44 @@ Terraform, and shipped through an automated Jenkins CI/CD pipeline.
 This project is a **complete task-management platform** built to demonstrate a real end-to-end
 software delivery lifecycle — not just an app, but the infrastructure and automation around it.
 
-Users can register, log in, and manage personal to-do items through a Flutter client (Web, Android,
-iOS, Desktop) backed by a stateless Express REST API. Authentication is handled with JWT, passwords
-are hashed with bcrypt, and all data is persisted in Amazon DynamoDB. The entire stack is
-containerized, deployed to Kubernetes, provisioned with Terraform, and automated end-to-end with
-a Jenkins pipeline.
+Users register, log in, and manage personal to-do items through a Flutter client (Web, Android,
+iOS, Desktop) backed by a stateless Express REST API. Authentication runs on JWT, passwords are
+hashed with bcrypt, and everything is persisted in Amazon DynamoDB. The stack is containerized,
+deployed to Kubernetes, provisioned with Terraform, and shipped end-to-end through a Jenkins
+pipeline.
 
 <br/>
 
 ## 🚀 Features
 
-| | |
-|---|---|
-| 🔐 **Secure Authentication** | JWT-based sessions with bcrypt password hashing |
-| ✅ **Full CRUD** | Create, list, and delete personal to-do items |
-| 📱 **Cross-Platform Client** | One Flutter codebase → Web, Android, iOS, Windows, macOS, Linux |
-| 🗄️ **NoSQL Persistence** | Amazon DynamoDB with on-demand billing |
-| 🐳 **Containerized** | Independent Docker images for frontend & backend |
-| ☸️ **Orchestrated** | Kubernetes Deployments + Services for both tiers |
-| 🌍 **Infrastructure as Code** | Terraform-managed AWS resources (DynamoDB, S3, ECR) |
-| 🔁 **Automated CI/CD** | Jenkins pipeline: build → test → containerize → provision → deploy |
+<table>
+<tr>
+<td width="50%" valign="top">
+
+🔐 **Secure authentication**
+JWT-based sessions with bcrypt password hashing
+
+✅ **Full CRUD**
+Create, list, and delete personal to-do items
+
+📱 **Cross-platform client**
+One Flutter codebase → Web, Android, iOS, Windows, macOS, Linux
+
+</td>
+<td width="50%" valign="top">
+
+🗄️ **NoSQL persistence**
+Amazon DynamoDB with on-demand billing
+
+🐳 **Containerized & orchestrated**
+Independent Docker images, deployed via Kubernetes
+
+🔁 **Automated CI/CD**
+Jenkins: build → test → containerize → provision → deploy
+
+</td>
+</tr>
+</table>
 
 <br/>
 
@@ -106,7 +116,7 @@ a Jenkins pipeline.
 </td>
 <td valign="top" width="50%">
 
-**Database & Cloud**
+**Database & cloud**
 
 | Tool | Purpose |
 |---|---|
@@ -115,7 +125,7 @@ a Jenkins pipeline.
 | ![ECR](https://img.shields.io/badge/-Amazon%20ECR-FF9900?style=flat-square&logo=amazonaws&logoColor=white) | Container image registry |
 | ![LocalStack](https://img.shields.io/badge/-LocalStack-181A29?style=flat-square) | Local AWS emulation for dev |
 
-**DevOps & Infrastructure**
+**DevOps & infrastructure**
 
 | Tool | Purpose |
 |---|---|
@@ -133,7 +143,7 @@ a Jenkins pipeline.
 ## 🏗️ System Architecture
 
 > One diagram, end to end — from a developer's `git push` all the way to a served request in
-> production.
+> production. Grouped like an AWS reference diagram: pipeline on top, cloud runtime below.
 
 ```mermaid
 flowchart TB
@@ -141,48 +151,47 @@ flowchart TB
     classDef client fill:#EDE7F6,stroke:#7B42BC,color:#3C1A66,stroke-width:1px
     classDef k8s fill:#E3F2FD,stroke:#326CE5,color:#0D3B78,stroke-width:1px
     classDef aws fill:#FFF8E1,stroke:#FF9900,color:#7A4E00,stroke-width:1px
+    classDef step fill:#2EC4B6,stroke:#0F6E56,color:#04342C,stroke-width:1px
 
-    Dev([👩‍💻 Developer git push]) --> GH[(GitHub Repository)]
+    Dev(["👩‍💻 Developer<br/>git push"]) --> GH[("① GitHub Repository")]
 
     subgraph CI["🔁 Jenkins CI/CD Pipeline"]
         direction LR
-        J1[Checkout SCM] --> J2[Install deps and run tests]
-        J2 --> J3[Build Docker images]
-        J3 --> J4[Push images to ECR]
-        J4 --> J5[Terraform apply]
-        J5 --> J6[kubectl apply to K8s]
+        J1["② Checkout & Test"] --> J2["③ Build Docker Images"]
+        J2 --> J3["④ Push Images to ECR"]
     end
     class CI ci
 
     GH -->|Webhook trigger| J1
 
-    subgraph AWS["☁️ AWS Resources — via Terraform / LocalStack"]
+    subgraph AWS_ENV["☁️ AWS Cloud — via Terraform"]
         direction LR
-        ECR[(Amazon ECR<br/>image registry)]
-        S3[(Amazon S3<br/>bucket)]
-        DDB[(Amazon DynamoDB<br/>TodoUsers / TodoItems)]
+        ECR[("Amazon ECR")]
+        TF["⑤ terraform apply"]
+        DDB[("DynamoDB")]
+        S3[("S3 Bucket")]
+        TF --> DDB
+        TF --> S3
     end
-    class AWS aws
+    class AWS_ENV aws
 
-    J4 --> ECR
-    J5 --> S3
-    J5 --> DDB
+    J3 --> ECR
+    J3 -.-> TF
 
-    subgraph K8S["☸️ Kubernetes Cluster — Minikube"]
+    subgraph K8S["☸️ Kubernetes Cluster"]
         direction LR
-        FE[Frontend Pod<br/>Nginx + Flutter web build]
-        BE[Backend Pod<br/>Express REST API :4588]
+        FE["Frontend Pod<br/>Nginx + Flutter"]
+        BE["Backend Pod<br/>Express API :4588"]
     end
     class K8S k8s
 
-    J6 --> FE
-    J6 --> BE
+    TF -->|"⑥ kubectl apply"| K8S
     ECR -.pulls image.-> FE
     ECR -.pulls image.-> BE
+    BE -->|JWT auth + CRUD| DDB
 
-    User([📱 End user]) -->|HTTPS| FE
+    User(["📱 End user"]) -->|"⑦ HTTPS"| FE
     FE -->|REST / JSON| BE
-    BE -->|JWT auth + CRUD via AWS SDK| DDB
 
     class Dev,User client
 ```
@@ -343,15 +352,19 @@ To-Do-app/
 ![Terraform](https://img.shields.io/badge/Terraform-%E2%89%A51.5-7B42BC?style=flat-square&logo=terraform&logoColor=white)
 ![kubectl](https://img.shields.io/badge/kubectl-required-326CE5?style=flat-square&logo=kubernetes&logoColor=white)
 
-### 1. Clone the repository
+<table>
+<tr><td width="28px" align="center"><b>1</b></td><td>
 
+**Clone the repository**
 ```bash
 git clone https://github.com/saurabhisane/To-Do-app.git
 cd To-Do-app
 ```
 
-### 2. Run the backend locally
+</td></tr>
+<tr><td align="center"><b>2</b></td><td>
 
+**Run the backend locally**
 ```bash
 cd backend
 npm install
@@ -359,38 +372,46 @@ npm run dev          # nodemon, watches for changes
 # Server runs on http://localhost:4588
 ```
 
-### 3. Run the Flutter client
+</td></tr>
+<tr><td align="center"><b>3</b></td><td>
 
+**Run the Flutter client**
 ```bash
 cd to_do_app
 flutter pub get
 flutter run -d chrome --dart-define=API_BASE_URL=http://localhost:4588/
 ```
 
-### 4. Spin up infrastructure locally (LocalStack + Terraform)
+</td></tr>
+<tr><td align="center"><b>4</b></td><td>
 
+**Spin up infrastructure locally (LocalStack + Terraform)**
 ```bash
 cd infrastructure/terraform
 terraform init
 terraform apply -auto-approve
 ```
 
-### 5. Build & deploy with Docker + Kubernetes
+</td></tr>
+<tr><td align="center"><b>5</b></td><td>
 
+**Build & deploy with Docker + Kubernetes**
 ```bash
-# Build images
 docker build -t todo-app:latest ./backend
 docker build -t todo-frontend:latest ./to_do_app
-
-# Deploy to your cluster
 kubectl apply -f infrastructure/k8s/
 ```
 
-### 6. Automate it all with Jenkins
+</td></tr>
+<tr><td align="center"><b>6</b></td><td>
 
+**Automate it all with Jenkins**
 Point a Jenkins multibranch pipeline job at this repository — the included `Jenkinsfile`
 handles build, test, image push, Terraform provisioning, and Kubernetes rollout automatically
 on every push.
+
+</td></tr>
+</table>
 
 <br/>
 
@@ -410,68 +431,13 @@ on every push.
 
 <br/>
 
-## 📡 API Reference
-
-| Method | Endpoint | Description | Auth |
-|---|---|---|---|
-| `POST` | `/registration` | Register a new user | ❌ |
-| `POST` | `/login` | Authenticate and receive a JWT | ❌ |
-| `POST` | `/todo` | Create a new to-do item | ✅ |
-| `POST` | `/getTodoData` | Fetch all to-dos for a user | ✅ |
-| `POST` | `/deleteTodo` | Delete a to-do item | ✅ |
-
-<br/>
-
-## 🗄️ Database Schema
-
-| Table | Partition Key | Sort Key | Notes |
-|---|---|---|---|
-| `TodoUsers` | `email` (String) | — | Stores hashed password + generated `userId` |
-| `TodoItems` | `userId` (String) | `todoId` (String) | One item per to-do, scoped per user |
-
-<br/>
-
-## 🗺️ Roadmap
-
-- [ ] Add automated test coverage (backend + Flutter widget tests)
-- [ ] Add Ingress + TLS for the Kubernetes cluster
-- [ ] Multi-replica Deployments with HPA
-- [ ] Centralized logging & monitoring (CloudWatch / Prometheus + Grafana)
-- [ ] Move Jenkins secrets to a dedicated secrets manager
-
-<br/>
-
-## 🤝 Contributing
-
-Contributions are welcome! To contribute:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-<br/>
-
-## 📄 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
-<br/>
-
-## 👤 Author
-
-**Saurabh Isane**
-
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/saurabhisane)
-
-<br/>
-
 <p align="center">
   <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%">
 </p>
 
 <div align="center">
+
+Built by **[Saurabh Isane](https://github.com/saurabhisane)**
 
 ⭐ **If this project helped you, consider giving it a star!** ⭐
 
