@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=32&duration=3000&pause=1000&color=2EC4B6&center=true&vCenter=true&width=650&lines=Full-Stack+To-Do+Application;Flutter+%2B+Node.js+%2B+DynamoDB;Dockerized+%7C+Kubernetes+%7C+Terraform;CI%2FCD+Automated+with+Jenkins" alt="Typing SVG" />
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=32&duration=3000&pause=1000&color=2EC4B6&center=true&vCenter=true&width=700&lines=Full-Stack+To-Do+Application;Flutter+%2B+Node.js+%2B+DynamoDB;Dockerized+%7C+Kubernetes+%7C+Terraform;CI%2FCD+Automated+with+Jenkins" alt="Typing SVG" />
 
 <br/>
 
