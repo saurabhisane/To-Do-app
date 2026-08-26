@@ -54,7 +54,7 @@ pipeline {
                             -v "$WORKSPACE/to_do_app:/app" \
                             -w /app \
                             ghcr.io/cirruslabs/flutter:stable \
-                            bash -c "flutter pub get && flutter analyze"
+                            bash -c "flutter pub get && flutter analyze && flutter test"
                     '''
                 }
             }
