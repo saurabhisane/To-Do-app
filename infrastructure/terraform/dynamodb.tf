@@ -8,9 +8,9 @@ resource "aws_dynamodb_table" "todo_users" {
     type = "S"
   }
   tags = {
-    Name = "TodoUsers"
+    Name        = "TodoUsers"
     environment = "dev"
-    project = "todo-app"
+    project     = "todo-app"
   }
 }
 
@@ -30,8 +30,8 @@ resource "aws_dynamodb_table" "todo_items" {
     type = "S"
   }
   tags = {
-    Name = "TodoItems"
+    Name        = "TodoItems"
     environment = "dev"
-    project = "todo-app"
+    project     = "todo-app"
   }
 }
