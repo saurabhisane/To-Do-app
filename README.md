@@ -215,6 +215,8 @@ The Jenkins pipeline is what turns a `git push` into a running Pod. Each stage m
 
 <br/>
 
+![CI-CD Pipeline](to_do_app/assets/image.png)
+
 ## 📂 Project Structure
 
 ```text
