@@ -53,7 +53,7 @@ pipeline {
                         docker run --rm \
                             -v "$WORKSPACE/to_do_app:/app" \
                             -w /app \
-                            ghcr.io/cirruslabs/flutter:test \
+                            ghcr.io/cirruslabs/flutter:stable \
                             bash -c "flutter pub get && flutter test"
                     '''
                 }
