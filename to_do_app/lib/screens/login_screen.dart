@@ -7,7 +7,7 @@ import 'package:to_do_app/screens/signup_screen.dart';
 import 'package:http/http.dart' as http;
 import '../config.dart';
 import '../sucess_reg.dart';
-import 'home_screen.dart';
+// import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -51,18 +51,18 @@ class _LoginScreenState extends State<LoginScreen> {
         );
 
         var jsonRes = jsonDecode(response.body);
-        print(jsonRes);
+        // print(jsonRes);
 
         if (response.statusCode == 200) {
           Get.snackbar('Success', 'Login successful!');
 
           var myToken = jsonRes['token'];
-          print(myToken);
+          // print(myToken);
           await prefs?.setString('token', myToken); // Store token in SharedPreferences
 
           Get.to(() => SuccessReg(token: myToken,));
           if (kDebugMode) {
-            print(jsonRes);
+            // print(jsonRes);
           }
         } else {
           // Handle error response
@@ -70,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       } catch (e) {
         Get.snackbar('Error', 'Network error: $e');
-        print(e);
+        // print(e);
       } finally {
         setState(() {
           isLoading = false; // Stop loading
