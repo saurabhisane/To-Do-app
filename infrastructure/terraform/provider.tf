@@ -17,6 +17,7 @@ provider "aws" {
   endpoints {
     s3  = "http://localhost:4566"
     ecr = "http://localhost:4566"
+    dynamodb = "http://localhost:4566"
   }
 
   skip_credentials_validation = true
