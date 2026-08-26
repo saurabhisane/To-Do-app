@@ -63,8 +63,9 @@ pipeline {
         stage('Build Backend Image'){
             steps{
                 sh '''
-                    docker build\
+                    docker build \
                         -t ${BACKEND_IMAGE}:${BUILD_NUMBER} \
+                        -t ${BACKEND_IMAGE}:latest \
                         -f backend/Dockerfile \
                         ./backend
                 '''
@@ -74,8 +75,9 @@ pipeline {
         stage('Build Frontend Image'){
             steps{
                 sh '''
-                    docker build\
+                    docker build \
                         -t ${FRONTEND_IMAGE}:${BUILD_NUMBER} \
+                        -t ${FRONTEND_IMAGE}:latest \
                         -f to_do_app/Dockerfile \
                         ./to_do_app
                 '''
